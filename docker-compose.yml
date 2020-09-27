@@ -27,7 +27,7 @@ x-backend: &backend
     - bundle:/usr/local/bundle
     - node_modules:/app/node_modules
     - packs:/app/public/packs
-  environment:
+  environment: &backendenv
     <<: *env
     DATABASE_URL: postgres://postgres:password@postgres:5432
     BOOTSNAP_CACHE_DIR: /usr/local/bundle/_bootsnap
@@ -35,8 +35,10 @@ x-backend: &backend
     HISTFILE: /app/log/.bash_history
     PSQL_HISTFILE: /app/log/.psql_history
     EDITOR: vi
+    RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
   depends_on:
     - postgres
+    - rabbitmq
 
 services:
   runner:
@@ -99,6 +101,13 @@ services:
       - 15672:15672
     volumes:
       - rabbitmq:/var/lib/rabbitmq
+
+  sneakers:
+    <<: *backend
+    environment:
+      <<: *backendenv
+      WORKERS: ActiveJob::QueueAdapters::SneakersAdapter::JobWrapper
+    command: bundle exec rake sneakers:run
 
 volumes:
   bundle:
