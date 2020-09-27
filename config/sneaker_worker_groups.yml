@@ -1,0 +1,6 @@
+default:
+  classes: DefaultWorker
+  workers: 8
+other:
+  classes: OtherWorker
+  workers: 2

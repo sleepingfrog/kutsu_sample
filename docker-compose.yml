@@ -104,10 +104,7 @@ services:
 
   sneakers:
     <<: *backend
-    environment:
-      <<: *backendenv
-      WORKERS: ActiveJob::QueueAdapters::SneakersAdapter::JobWrapper
-    command: bundle exec rake sneakers:run
+    command: bundle exec ruby -e "require 'sneakers/spawner';Sneakers::Spawner.spawn"
 
 volumes:
   bundle:
