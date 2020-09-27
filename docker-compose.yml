@@ -91,6 +91,15 @@ services:
       interval: 1s
       timeout: 3s
       retries: 30
+
+  rabbitmq:
+    image: rabbitmq:3.8.9-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+
 volumes:
   bundle:
   node_modules:
@@ -98,3 +107,4 @@ volumes:
   postgres:
   rails_cache:
   redis:
+  rabbitmq:
