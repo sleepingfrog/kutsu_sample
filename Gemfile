@@ -57,3 +57,4 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'rubocop', group: :development
 gem 'annotate', group: :development
 gem 'marginalia'
+gem 'sneakers'
