@@ -3,6 +3,7 @@ class OtherWorker
   include Sneakers::Worker
   from_queue "other",
     prefetch: 10,
+    retry_error_exchange: 'error',
     arguments: {
       'x-dead-letter-exchange': 'other-retry',
     }

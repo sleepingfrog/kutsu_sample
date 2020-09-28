@@ -3,4 +3,7 @@ default:
   workers: 8
 other:
   classes: OtherWorker
-  workers: 2
+  workers: 1
+error:
+  classes: ErrorLogWorker
+  workers: 1
