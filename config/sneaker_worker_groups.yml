@@ -1,0 +1,9 @@
+default:
+  classes: DefaultWorker
+  workers: 8
+other:
+  classes: OtherWorker
+  workers: 1
+error:
+  classes: ErrorLogWorker
+  workers: 1

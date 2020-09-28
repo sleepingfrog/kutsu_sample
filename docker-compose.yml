@@ -27,7 +27,7 @@ x-backend: &backend
     - bundle:/usr/local/bundle
     - node_modules:/app/node_modules
     - packs:/app/public/packs
-  environment:
+  environment: &backendenv
     <<: *env
     DATABASE_URL: postgres://postgres:password@postgres:5432
     BOOTSNAP_CACHE_DIR: /usr/local/bundle/_bootsnap
@@ -35,8 +35,10 @@ x-backend: &backend
     HISTFILE: /app/log/.bash_history
     PSQL_HISTFILE: /app/log/.psql_history
     EDITOR: vi
+    RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
   depends_on:
     - postgres
+    - rabbitmq
 
 services:
   runner:
@@ -91,6 +93,19 @@ services:
       interval: 1s
       timeout: 3s
       retries: 30
+
+  rabbitmq:
+    image: rabbitmq:3.8.9-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+
+  sneakers:
+    <<: *backend
+    command: bundle exec ruby -e "require 'sneakers/spawner';Sneakers::Spawner.spawn"
+
 volumes:
   bundle:
   node_modules:
@@ -98,3 +113,4 @@ volumes:
   postgres:
   rails_cache:
   redis:
+  rabbitmq:
